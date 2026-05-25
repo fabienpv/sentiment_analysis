@@ -4,36 +4,34 @@
 
 2. Install Git ([https://git-scm.com/install/](https://git-scm.com/install/))
 
-3. Create a project folder.
+3. Open PowerShell.
 
-4. Open PowerShell.
-
-5. In PowerShell, navigate to the folder where you want to add the project repository:
+4. In PowerShell, navigate to the folder where you want to add the project repository:
 ```bash
 cd C:\Users\myusername\Documents\pick_a_repo
 ```
 
-6. Clone the project repository:
+5. Clone the project repository:
 ```bash
 git clone https://github.com/fabienpv/sentiment_analysis.git
 ```
 
-7. Move into the project repository:
+6. Move into the project repository:
 ```bash
 cd sentiment_analysis
 ```
 
-8. Create a virtual environment (recommended name: `.venv`):
+7. Create a virtual environment (recommended name: `.venv`):
 ```bash
 python -m venv .venv
 ```
 
-9. Install the required libraries. This may take a few minutes:
+8. Install the required libraries. This may take a few minutes:
 ```bash
 pip install -r requirements.txt
 ```
 
-10. Clone the model repositories from Hugging Face. This may take several minutes per model:
+9. Clone the model repositories from Hugging Face. This may take several minutes per model:
 ```bash
 git clone https://huggingface.co/google/gemma-4-E2B-it
 ```
