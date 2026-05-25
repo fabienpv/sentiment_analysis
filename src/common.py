@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 
 def print_and_log_text(path: str, text: str):
     with open(path, "a") as f_:
-        f_.write(text)
+        f_.write("\n"+text)
     print(text)
 
 
 def get_text_input():
     with open(str(PROJECT_DIR / "text_input.txt"), "r", encoding="utf-8") as f_:
-        text = f_.read()
+        text = f_.read().replace("\"", "'")
     return text.strip()
 
 
@@ -66,7 +66,7 @@ def pipeline_text_classification(
 
 
 def sentence_splitter(text_input: str):
-    splits = re.split(r"[\.;:]", text_input)
+    splits = re.split(r"[\.;:!?]", text_input)
     sentences = []
     ongoing = ""
     for s in splits:
@@ -80,10 +80,8 @@ def sentence_splitter(text_input: str):
             ongoing += f";{s}"
     if ongoing:
         sentences.append(f"{ongoing};{s}".strip())
-    sentences = [s for s in sentences if s.strip()]
+    sentences = [s for s in sentences if s.strip().replace(";", "")]
     return sentences
-
-
 
 def calculate_average(data):
     if not data:
@@ -141,8 +139,12 @@ def stats_summary(json_path: 'Path', stats_path: 'Path') -> list[dict] | None:
         try:
             json_path = str(json_path)
             stats_path = str(stats_path)
+
             with open(json_path, "r") as f_:
                 results = json.loads(f_.read())
+
+            with open(stats_path, "w") as f_:
+                f_.write("")
 
             n_sentences = len(results)
             avg = calculate_average(results)

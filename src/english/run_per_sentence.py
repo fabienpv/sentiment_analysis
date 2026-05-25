@@ -5,14 +5,14 @@ from src.common import (
     stats_summary
 )
 from src.english.run import run as run_en
-from src.config import PROJECT_DIR
+from src.config import PROJECT_DIR, DEFAULT_ENGLISH_EMOTIONS
 
 from typing import Literal
 
 
 def run(
     text_input: str = None, 
-    mode: Literal["7", "28"] = "7"
+    mode: Literal["7", "28"] = DEFAULT_ENGLISH_EMOTIONS
 ) -> list[dict]:
 
     assert str(mode) in ["7", "28"], str(mode)
@@ -21,6 +21,9 @@ def run(
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path = str(json_path)
 
+    with open(json_path, "w") as f_:
+        f_.write("")
+        
     if not text_input:
         text_input = get_text_input()
     if not text_input or len(text_input.strip()) == 0:

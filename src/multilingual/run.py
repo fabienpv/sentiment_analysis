@@ -7,7 +7,7 @@ from typing import Literal
 from src.common import print_and_log_text, get_text_input
 from src.config import (
     PROJECT_DIR, get_system_prompt_en, get_system_prompt_fr, 
-    MAX_NEW_TOKENS, DEFAULT_LANG, EMOTIONS
+    MAX_NEW_TOKENS, DEFAULT_LANG, EMOTIONS, list_to_str
 )
 
 
@@ -19,11 +19,11 @@ gemma_model = None
 
 
 def get_prompt_en(
-    definitions: str,
+    definitions: list[str],
     text_input: str
 ) -> str:
     return f"""## EMOTION DEFINITIONS:
-{definitions}
+{list_to_str(definitions)}
 
 ## RULES:
 Use the EMOTION DEFINITIONS to better understand what is meant by each emotion.
@@ -33,11 +33,11 @@ Use the EMOTION DEFINITIONS to better understand what is meant by each emotion.
 """
 
 def get_prompt_fr(
-    definitions: str,
+    definitions: list[str],
     text_input: str
 ) -> str:
     return f"""## DEFINITIONS DES EMOTIONS:
-{definitions}
+{list_to_str(definitions)}
 
 ## REGLES:
 Utilise les définitions des émotions pour mieux comprendre ce que chaque émotion signifie.
@@ -67,7 +67,7 @@ def get_gemma_model():
 
 def run(
     lang: Literal["fr", "en"], 
-    definitions: str = None,
+    definitions: list[str] = None,
     text_input: str = None
 ) -> tuple[dict[str, float], str]:
     """ Evaluates the emotions in the text using gemma 4 E2B model.
