@@ -4,9 +4,9 @@
 
 2. Install Git ([https://git-scm.com/install/](https://git-scm.com/install/))
 
-3. Open PowerShell.
+3. Open PowerShell or CMD.
 
-4. In PowerShell, navigate to the folder where you want to add the project repository:
+4. In PowerShell or CMD, navigate to the folder where you want to add the project repository:
 ```bash
 cd C:\Users\myusername\Documents\pick_a_repo
 ```
@@ -21,17 +21,22 @@ git clone https://github.com/fabienpv/sentiment_analysis.git
 cd sentiment_analysis
 ```
 
-7. Create a virtual environment (recommended name: `.venv`):
+7. Create a virtual environment (recommended name: `.venv`)
 ```bash
 python -m venv .venv
 ```
 
-8. Install the required libraries. This may take a few minutes:
+8. Activate the virtual environment to download the required libraries inside.
+```bash
+source .venv/Scripts/activate
+```
+
+9. Install the required libraries. This may take a few minutes:
 ```bash
 pip install -r requirements.txt
 ```
 
-9. Clone the model repositories from Hugging Face. This may take several minutes per model:
+10. Clone the model repositories from Hugging Face. This may take several minutes per model:
 ```bash
 git clone https://huggingface.co/google/gemma-4-E2B-it
 ```
@@ -80,7 +85,12 @@ The executable Python scripts are:
 cd C:\Users\myusername\Documents\pick_a_repo\sentiment_analysis
 ```
 
-3. To run the GUI:
+3. Activate the virtual environment. It will let python know where to find the libraries needed for the script.
+```bash
+source .venv/Scripts/activate
+```
+
+4. To run the GUI:
 ```bash
 python -m streamlit run src/gui.py
 ```
