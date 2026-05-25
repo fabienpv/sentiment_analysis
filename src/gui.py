@@ -1,6 +1,6 @@
 import streamlit as st
 import json
-import ast
+import re
 
 from src.multilingual.run import run as run_gemma
 from src.english.run_per_sentence import run as run_en_sent
@@ -11,7 +11,7 @@ from src.english.run import run as run_en
 from src.french.run import run as run_fr
 from src.common import get_text_input
 from src.config import (
-    EMOTIONS, PROJECT_DIR, DEFAULT_LANG
+    EMOTIONS, PROJECT_DIR, DEFAULT_LANG, list_to_str
 )
 
 import warnings
@@ -22,6 +22,10 @@ def get_n_emotions() -> str:
         return ss.n_emotions
     else:
         return ""
+    
+def str_definition_to_list(text: str):
+    to_list = re.split(r"(?:\n+|^) *-? *", text)
+    return [item for item in to_list if item.strip()]
 
 st.set_page_config(page_title="Sentiment Analysis", layout="wide")
 st.title("Sentiment Analysis Interface")
@@ -54,10 +58,10 @@ if "selected_emotions_en" not in ss:
     ss["selected_emotions_en"] = EMOTIONS["en"]
 
 if "emotion_definitions_fr" not in ss:
-    ss["emotion_definitions_fr"] = EMOTIONS["definitions_fr"]
+    ss["emotion_definitions_fr"] = list_to_str(EMOTIONS["definitions_fr"])
 
 if "emotion_definitions_en" not in ss:
-    ss["emotion_definitions_en"] = EMOTIONS["definitions_en"]
+    ss["emotion_definitions_en"] = list_to_str(EMOTIONS["definitions_en"])
 
 if "user_input" not in ss:
     ss["user_input"] = get_text_input()
@@ -129,9 +133,6 @@ if st.button("Run Function"):
         else:
             caller_str = f"{ss.language}_{ss.method}"
 
-        # Dynamically define methods so kwargs use the LATEST session_state values
-        current_definitions = ss.emotion_definitions_en if ss.language == "en" else ss.emotion_definitions_fr
-
         methods = {
             "fr_Encoder_True_": {
                 "func": run_fr_sent,
@@ -147,7 +148,7 @@ if st.button("Run Function"):
             },
             "fr_Decoder": {
                 "func": run_gemma,
-                "kwargs": {"lang": "fr", "definitions": current_definitions},
+                "kwargs": {"lang": "fr"},
                 "res_path": PROJECT_DIR / "response" / "response_Gemma_4_E2B.json",
                 "reasoning_path": PROJECT_DIR / "response" / "reasoning_Gemma_4_E2B.txt",
             },
@@ -177,7 +178,7 @@ if st.button("Run Function"):
             },
             "en_Decoder": {
                 "func": run_gemma,
-                "kwargs": {"lang": "en", "definitions": current_definitions},
+                "kwargs": {"lang": "en"},
                 "res_path": PROJECT_DIR / "response" / "response_Gemma_4_E2B.json",
                 "reasoning_path": PROJECT_DIR / "response" / "reasoning_Gemma_4_E2B.txt",
             }
@@ -190,10 +191,10 @@ if st.button("Run Function"):
 
                 if ss.language == "fr":
                     EMOTIONS["fr"] = ss.selected_emotions_fr
-                    EMOTIONS["definitions_fr"] = ss.emotion_definitions_fr
+                    EMOTIONS["definitions_fr"] = str_definition_to_list(ss.emotion_definitions_fr)
                 if ss.language == "en":
                     EMOTIONS["en"] = ss.selected_emotions_en
-                    EMOTIONS["definitions_en"] = ss.emotion_definitions_en
+                    EMOTIONS["definitions_en"] = str_definition_to_list(ss.emotion_definitions_en)
                     
 
                 method_params = methods[caller_str]
